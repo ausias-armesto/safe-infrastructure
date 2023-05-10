@@ -1,0 +1,41 @@
+
+safe-config:
+  fullnameOverride: "safe-config"
+  image:
+    tag: latest
+  config:
+    secretKey: "secretValue"
+    cgw:
+      url: "http://gateway.safe.svc.cluster.stage:8000"
+      flushToken: example-flush-token
+    postgres:
+      secretReferenceKey: safe.safe-config-postgres-cluster-credentials
+      database: "safe_config"
+      host: "postgres-cluster.postgres.svc.cluster.stage"
+  persistence:
+    storageClassName: ceph-ephimeral
+safe-transaction:
+  fullnameOverride: "safe-transaction"
+  image:
+    tag: latest
+  config:
+    secretKey: "secretValue"
+    postgres:
+      secretReferenceKey: safe.safe-transaction-postgres-cluster-credentials
+      database: "safe_transaction"
+      host: "postgres-cluster.postgres.svc.cluster.stage"
+    redis:
+      secretReferenceKey: safe-transaction-redis-credentials
+      database: "1"
+      host: "redis-ha.redis.svc.cluster.stage"
+    rabbitmq:
+      secretReferenceKey: rabbitmq-credentials-safe
+      virtualHost: "safe"
+      host: "rabbitmq-ha-cluster.rabbitmq.svc.cluster.stage"
+  persistence:
+    storageClassName: ceph-ephimeral
+ingress:
+  ingressClassName: "nginx"
+  hostname: safe.stage.hoprtech.net
+  annotations:
+    cert-manager.io/cluster-issuer: linode-issuer

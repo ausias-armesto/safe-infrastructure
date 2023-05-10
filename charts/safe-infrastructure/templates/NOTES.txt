@@ -1,0 +1,2 @@
+[INFO] Safe Infrastructure Helm chart deployed successfully
+1. Access to the configuration service web app at https://{{ .Values.ingress.hostname }}
