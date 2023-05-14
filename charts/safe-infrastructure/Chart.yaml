@@ -12,3 +12,6 @@ dependencies:
   - name: safe-transaction
     repository: file://../../../safe-transaction-service/charts/safe-transaction
     version: 0.1.1
+  - name: safe-client-gateway
+    repository: file://../../../safe-client-gateway/charts/safe-client-gateway
+    version: 0.1.1

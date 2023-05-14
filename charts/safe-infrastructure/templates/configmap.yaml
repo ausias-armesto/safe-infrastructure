@@ -17,18 +17,22 @@ data:
   index.html: |
     <html>
       <body>
-        <h1>Configuration Service</h1>
-        <p> Access to <a href="./cfg/">Configuration Service API</a> </p>
-        <br><br>
-        <hr>
-        <h1>Transaction Service</h1>
-        <p> Access to <a href="./txs/">Transaction Service API</a> </p>
-        <br><br>
-        <hr>
-        <h1>Client Gateway</h1>
-        <p> Access to <a href="./cgw/">Client Gateway API</a> </p>
-        <br><br>
+        <h1>Safe Infrastructure</h1>
+        <p> This site contains all the services needed to run the Safe Infrastructure. This Safe infrastructure is run by <a href="https://www.hoprnet.org">Hopr</a></p>
 
+        <h3>Configuration Service</h3>
+        <p> Access to <a href="./cfg/">Configuration Service API</a></p>
+        <p> Access to <a href="./cfg/admin/">Django App</a></p>
+        <br><br>
+        <hr>
+        <h3>Transaction Service</h3>
+        <p> Access to <a href="./txs/">Transaction Service API</a></p>
+        <p> Access to <a href="./txs/admin/">Django App</a></p>
+        <br><br>
+        <hr>
+        <h3>Client Gateway</h3>
+        <p> Access to <a href="{{ .Values.config.clientGatewayEndpoint}}">Client Gateway API</a> </p>
+        <br><br>
       </body>
     </html>
   nginx.conf: |
@@ -63,15 +67,9 @@ data:
           keepalive 32;
         }
 
-        ## Client gateway
-        # upstream cgw_app_server {
-        #   server cgw-web:3666 fail_timeout=0;
-        #   keepalive 32;
-        # }
-
         server {
             access_log off;
-            listen 8000 deferred;
+            listen {{ .Values.service.ports.number}} deferred;
             charset utf-8;
             keepalive_timeout 75s;
 
@@ -128,19 +126,5 @@ data:
                 proxy_read_timeout 60s;
           }
 
-          ## Client gateway mounting point
-          # location /cgw/ {
-          #       proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
-          #       proxy_set_header    X-Forwarded-Proto   $scheme;
-          #       proxy_set_header    Host                $host;
-          #       # we don't want nginx trying to do something clever with
-          #       # redirects, we set the Host: header above already.
-          #       proxy_redirect off;
-          #       proxy_pass http://cgw_app_server/;
-
-          #       proxy_set_header X-Forwarded-Host $server_name;
-          #       proxy_set_header X-Real-IP $remote_addr;
-          #       add_header              Front-End-Https   on;
-          #   }
         }
     }

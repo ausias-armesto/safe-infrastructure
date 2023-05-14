@@ -1,4 +1,6 @@
 
+---
+## Safe Config Child Chart
 safe-config:
   fullnameOverride: "safe-config"
   image:
@@ -6,14 +8,14 @@ safe-config:
   config:
     secretKey: "secretValue"
     cgw:
-      url: "http://gateway.safe.svc.cluster.stage:8000"
+      url: "https://safe-client-gateway.stage.hoprtech.net"
       flushToken: example-flush-token
     postgres:
-      secretReferenceKey: safe.safe-config-postgres-cluster-credentials
-      database: "safe_config"
-      host: "postgres-cluster.postgres.svc.cluster.stage"
+      secretReferenceKey: safe-config-postgres
   persistence:
     storageClassName: ceph-ephimeral
+
+## Safe Transaction Child Chart
 safe-transaction:
   fullnameOverride: "safe-transaction"
   image:
@@ -21,21 +23,47 @@ safe-transaction:
   config:
     secretKey: "secretValue"
     postgres:
-      secretReferenceKey: safe.safe-transaction-postgres-cluster-credentials
-      database: "safe_transaction"
-      host: "postgres-cluster.postgres.svc.cluster.stage"
+      secretReferenceKey: safe-transaction-postgres
     redis:
-      secretReferenceKey: safe-transaction-redis-credentials
-      database: "1"
-      host: "redis-ha.redis.svc.cluster.stage"
+      secretReferenceKey: safe-transaction-redis
+      storageClassName: ceph-ephimeral
     rabbitmq:
-      secretReferenceKey: rabbitmq-credentials-safe
-      virtualHost: "safe"
-      host: "rabbitmq-ha-cluster.rabbitmq.svc.cluster.stage"
+      secretReferenceKey: safe-transaction-rabbitmq
+    extraEnvVars:
+      CSRF_TRUSTED_ORIGINS: "https://safe.stage.hoprtech.net"
   persistence:
     storageClassName: ceph-ephimeral
+
+## Safe Client Gateway Child Chart
+safe-client-gateway:
+  fullnameOverride: "safe-client-gateway"
+  image:
+    tag: latest
+  ingress:
+    ingressClassName: "nginx"
+    hostname: safe-client-gateway.stage.hoprtech.net
+    annotations:
+      cert-manager.io/cluster-issuer: linode-issuer
+  config:
+    configServiceEndpoint: https://safe.stage.hoprtech.net/cfg/
+    secretKey: "spYv41wecHx0fZ5rVA3JGT69FSkRuCbLNp23VcQWYrQ"
+    webToken: example-flush-token
+    transactionServiceToken: "qI+lbBlHu+FhjAWbpCKZc/f2RpXg5bLhe+g4rGcZvuo="
+    logLevel: debug
+    redis:
+      secretReferenceKey: safe-client-gateway-redis
+    redisMainnet:
+      secretReferenceKey: safe-client-gateway-redis-mainnet
+    extraEnvVars:
+      RUST_BACKTRACE: full
+
+
+# Main Chart configuration
+
 ingress:
   ingressClassName: "nginx"
   hostname: safe.stage.hoprtech.net
   annotations:
     cert-manager.io/cluster-issuer: linode-issuer
+config:
+  clientGatewayEndpoint: "https://safe-client-gateway.stage.hoprtech.net"

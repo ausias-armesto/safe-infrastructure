@@ -1,9 +1,0 @@
-dependencies:
-- name: safe-config
-  repository: file://../../../safe-config-service/charts/safe-config
-  version: 0.1.1
-- name: safe-transaction
-  repository: file://../../../safe-transaction-service/charts/safe-transaction
-  version: 0.1.1
-digest: sha256:f46315ee8b3c3656c5a38ce2ee501c91b80e5cf57f53f5f54621432a9633ae14
-generated: "2023-05-10T18:30:32.499648+02:00"
