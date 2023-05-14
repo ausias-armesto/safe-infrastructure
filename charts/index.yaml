@@ -1,0 +1,24 @@
+apiVersion: v1
+entries:
+  safe:
+  - apiVersion: v2
+    created: "2023-05-14T19:30:51.885337+02:00"
+    dependencies:
+    - name: safe-config
+      repository: file://../../../safe-config-service/charts/safe-config
+      version: 0.1.1
+    - name: safe-transaction
+      repository: file://../../../safe-transaction-service/charts/safe-transaction
+      version: 0.1.1
+    - name: safe-client-gateway
+      repository: file://../../../safe-client-gateway/charts/safe-client-gateway
+      version: 0.1.1
+    description: A Helm chart for Safe
+    digest: 1d2c1b9c474905c1029b5ba0b9fd7cf0b3adb0b3b6982f27de034027f3b6a495
+    icon: https://raw.githubusercontent.com/safe-global/safe-core-sdk/main/assets/logo.png
+    name: safe
+    type: application
+    urls:
+    - safe-0.1.1.tgz
+    version: 0.1.1
+generated: "2023-05-14T19:30:51.882577+02:00"
